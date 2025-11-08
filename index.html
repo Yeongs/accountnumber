@@ -1,0 +1,50 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>계좌번호 복사</title>
+<style>
+  body { font-family: Arial, sans-serif; background: #111; color: #f7e8c8; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+  .container { background: #1b1b1b; padding: 20px; border-radius: 12px; text-align: center; width: 90%; max-width: 400px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
+  h1 { font-size: 20px; margin-bottom: 10px; }
+  .account { font-size: 22px; font-weight: bold; color: #f0d487; margin: 10px 0; }
+  button { background: #2a2a2a; color: #fff; border: none; padding: 12px 16px; border-radius: 8px; font-size: 16px; cursor: pointer; }
+  .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: #fff; padding: 10px 16px; border-radius: 20px; opacity: 0; transition: opacity 0.3s ease; }
+  .toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>계좌번호가 복사되었습니다</h1>
+  <div class="account" id="acct">카카오뱅크 7942-13-40470</div>
+  <button onclick="copyAccount()">다시 복사하기</button>
+  <p style="font-size:14px; opacity:0.8; margin-top:10px;">이 페이지는 복사만 수행합니다. 결제는 직접 이체로 진행하세요.</p>
+</div>
+<div id="toast" class="toast">계좌번호가 복사되었습니다</div>
+<script>
+  const acctText = '7942-13-40470';
+  async function copyAccount() {
+    try {
+      await navigator.clipboard.writeText(acctText);
+      showToast();
+    } catch (err) {
+      const textarea = document.createElement('textarea');
+      textarea.value = acctText;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+      showToast();
+    }
+  }
+  function showToast() {
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 1500);
+  }
+  window.onload = copyAccount;
+</script>
+</body>
+</html>
